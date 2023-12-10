@@ -66,8 +66,11 @@ fun MainMenu() {
             Text(text = "Highscore")
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { /* TODO: FAQ Logic */ }) {
-            Text(text = "FAQ")
+        Button(onClick = {
+        val intent = Intent(context, FaqActivity::class.java)
+        context.startActivity(intent)
+    }) {
+        Text(text = "FAQ")
         }
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
