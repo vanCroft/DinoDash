@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 
 
 class FaqActivity : ComponentActivity() {
@@ -64,7 +65,7 @@ val faqList = listOf(
     ),
     FaqItem(
        question = "Was passiert, wenn ich ein faules Ei berühre?",
-        answer = "Wenn du ein faules Ei berührst, verlierst du Punkte. Die Anzahl der verlorenen Punkte hängt davon ab, wie viele gute Eier du bereits gesammelt hast."
+        answer = "Wenn du ein faules Ei berührst, verlierst du Punkte."
     ),
     FaqItem(
         question = "Wie endet ein Level?",
@@ -75,3 +76,9 @@ val faqList = listOf(
         answer = "Ja, das Spiel ist für Touch-Geräte wie Smartphones und Tablets optimiert."
     ),
 )
+
+@Preview(showBackground = true)
+@Composable
+fun FaqPreview() {
+    FaqScreen()
+}
