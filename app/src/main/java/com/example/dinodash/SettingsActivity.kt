@@ -11,6 +11,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.material3.Button
+
 
 
 class SettingsActivity : ComponentActivity() {
@@ -20,11 +23,12 @@ class SettingsActivity : ComponentActivity() {
             SettingsScreen()
         }
     }
-}
+    }
 
 @Composable
 fun SettingsScreen() {
     var volume by remember { mutableStateOf(0.5f) }
+    val activity = LocalContext.current as? ComponentActivity
 
     Column(modifier = Modifier.padding(16.dp)) {
         Text("Lautstärke: ${(volume * 100).toInt()}%")
@@ -32,9 +36,14 @@ fun SettingsScreen() {
             value = volume,
             onValueChange = { volume = it },
             onValueChangeFinished = {
-                // Hier können Sie die Lautstärkeänderung speichern oder anwenden
+                // Lautstärkeänderung
             }
         )
+        Button(onClick = {
+            activity?.finish()
+        }) {
+            Text(text = "Zurück zum Hauptmenü")
+        }
     }
 }
 

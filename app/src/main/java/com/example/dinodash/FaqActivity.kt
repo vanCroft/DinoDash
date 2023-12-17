@@ -3,7 +3,6 @@ package com.example.dinodash
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,6 +13,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Button
+import androidx.compose.ui.platform.LocalContext
 
 
 class FaqActivity : ComponentActivity() {
@@ -27,11 +28,20 @@ class FaqActivity : ComponentActivity() {
 
 @Composable
 fun FaqScreen() {
+    val activity = LocalContext.current as? ComponentActivity
+
     LazyColumn(modifier = Modifier.padding(16.dp)) {
         items(faqList) { faq ->
             Text(text = "Q: ${faq.question}", style = MaterialTheme.typography.headlineMedium)
             Text(text = "A: ${faq.answer}", style = MaterialTheme.typography.bodyLarge)
-            Spacer(Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+        item {
+            Button(modifier = Modifier.padding(16.dp), onClick = {
+                activity?.finish()
+            }) {
+                Text(text = "Zurück zum Hauptmenü")
+            }
         }
     }
 }
