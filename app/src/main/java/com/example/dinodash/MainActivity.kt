@@ -1,4 +1,4 @@
-package com.example.com.example.dinodash
+package com.example.dinodash
 
 import android.content.Intent
 import android.os.Bundle
@@ -22,8 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 
-import com.example.dinodash.GameActivity
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +34,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun StartMenuScreen() {
     // Hintergrundbild + Logo
-    val backgroundImage: Painter = painterResource(id = R.drawable.dino_dash_bg)
-    val logoImage: Painter = painterResource(id = R.drawable.dino_dash_logo)
+    val backgroundImage: Painter = painterResource(id = R.drawable.dinodashbg)
+    val logoImage: Painter = painterResource(id = R.drawable.dinodashlogo)
     Box(
         modifier = Modifier
             .fillMaxSize()

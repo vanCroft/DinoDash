@@ -1,8 +1,5 @@
 package com.example.dinodash
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,38 +11,86 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.FontWeight
 
 
-class FaqActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            FaqScreen()
+@Composable
+fun FaqScreen() {
+    val backgroundImage: Painter = painterResource(id = R.drawable.dinodashbg)
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = backgroundImage,
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(44.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "FAQ's",
+                color = Color(0xFF314A22),
+                fontSize = 78.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(6.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                items(faqList) { faq ->
+                    FaqItemCard(faq)
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
+                item {
+                    Button(modifier = Modifier.padding(16.dp), onClick = {
+                        // Schließen der Aktivität
+                    }) {
+                        Text(text = "Zurück zum Hauptmenü")
+                    }
+                }
+            }
         }
     }
 }
 
 @Composable
-fun FaqScreen() {
-    val activity = LocalContext.current as? ComponentActivity
-
-    LazyColumn(modifier = Modifier.padding(16.dp)) {
-        items(faqList) { faq ->
-            Text(text = "Q: ${faq.question}", style = MaterialTheme.typography.headlineMedium)
+fun FaqItemCard(faq: FaqItem) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = "Q: ${faq.question}", style = MaterialTheme.typography.headlineSmall)
+            Spacer(modifier = Modifier.height(8.dp))
             Text(text = "A: ${faq.answer}", style = MaterialTheme.typography.bodyLarge)
-            Spacer(modifier = Modifier.height(10.dp))
-        }
-        item {
-            Button(modifier = Modifier.padding(16.dp), onClick = {
-                activity?.finish()
-            }) {
-                Text(text = "Zurück zum Hauptmenü")
-            }
         }
     }
 }
+
 
 // FAQ
 data class FaqItem(val question: String, val answer: String)
@@ -61,7 +106,7 @@ val faqList = listOf(
     ),
     FaqItem(
         question = "Wie steuere ich den Dinosaurier?",
-        answer = "Du steuerst den Dinosaurier durch Tippen auf den Bildschirm. Ein kurzes Tippen lässt ihn springen, während langes Drücken einen höheren Sprung bewirkt. Mit Wischbewegungen kannst du ihm helfen, Hindernissen auszuweichen."
+        answer = "Du steuerst den Dinosaurier durch Tippen auf den Bildschirm. Ein kurzes Tippen lässt ihn springen, während langes Drücken einen höheren Sprung bewirkt."
     ),
     FaqItem(
        question = "Was passiert, wenn ich ein faules Ei berühre?",
