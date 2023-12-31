@@ -36,6 +36,8 @@ fun StartMenuScreen() {
     // Hintergrundbild + Logo
     val backgroundImage: Painter = painterResource(id = R.drawable.dinodashbg)
     val logoImage: Painter = painterResource(id = R.drawable.dinodashlogo)
+    val context = LocalContext.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -48,22 +50,49 @@ fun StartMenuScreen() {
             contentScale = ContentScale.Crop
         )
 
-        // Logo oben mittig platzieren
-        Image(
-            painter = logoImage,
-            contentDescription = "Dino Dash Logo",
+        Column(
             modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 123.dp) // Abstand von oben
-        )
-
-
-        // Zentriert den Button im Bildschirm
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+                .fillMaxSize()
+                .padding(top = 123.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Image(
+                painter = logoImage,
+                contentDescription = "Dino Dash Logo"
+            )
+
             StartButton()
+
+            // Zeile für zusätzliche Buttons
+            Row(
+                modifier = Modifier.padding(top = 16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Button(
+                    onClick = { /* Highscore Logik */ },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF314A22)),
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                ) {
+                    Text("Highscore")
+                }
+                Button(
+                    onClick = {
+                        // Öffnen der FAQ's
+                        context.startActivity(Intent(context, FaqActivity::class.java))
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF314A22)),
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                ) {
+                    Text("FAQ's")
+                }
+                Button(
+                    onClick = { /* Einstellungen Logik */ },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF314A22)),
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                ) {
+                    Text("Einstellungen")
+                }
+            }
         }
     }
 }
@@ -79,15 +108,15 @@ fun StartButton() {
             val intent = Intent(context, GameActivity::class.java)
             context.startActivity(intent)
         },
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF314A22)), // Buttonfarbe
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF314A22)),
         modifier = Modifier
             .padding(16.dp)
-            .height(80.dp) // Höhe des Button
+            .height(80.dp)
     ) {
         Text(
             text = "DinoDash STARTEN",
-            color = Color.White, // Textfarbe
-            fontSize = 26.sp // Schriftgröße
+            color = Color.White,
+            fontSize = 26.sp
         )
     }
 }
