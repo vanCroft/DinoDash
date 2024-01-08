@@ -26,6 +26,10 @@ import androidx.compose.ui.text.font.FontWeight
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.platform.LocalContext
+
+
 
 class FaqActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +43,9 @@ class FaqActivity : ComponentActivity() {
 @Composable
 fun FaqScreen() {
     val backgroundImage: Painter = painterResource(id = R.drawable.dinodashbg)
+
+    // Abrufen des aktuellen Kontexts innerhalb der Composable-Funktion
+    val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -56,7 +63,7 @@ fun FaqScreen() {
         ) {
             Text(
                 text = "FAQ's",
-                color = Color(0xFF314A22),
+                color = Color(0xFFFFFFFF),
                 fontSize = 78.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(6.dp)
@@ -73,9 +80,16 @@ fun FaqScreen() {
                     Spacer(modifier = Modifier.height(10.dp))
                 }
                 item {
-                    Button(modifier = Modifier.padding(16.dp), onClick = {
-                        // Schließen der Aktivität
-                    }) {
+                    Button(
+                        modifier = Modifier.padding(16.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF314A22)),
+                        onClick = {
+                            // Verwenden des Kontexts, um die Aktivität zu beenden
+                            if (context is ComponentActivity) {
+                                context.finish()
+                            }
+                        }
+                    ) {
                         Text(text = "Zurück zum Hauptmenü")
                     }
                 }
