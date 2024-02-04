@@ -1,34 +1,35 @@
 package com.example.dinodash
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Button
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.font.FontWeight
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.runtime.Composable
 
 
 class FaqActivity : ComponentActivity() {
@@ -42,9 +43,9 @@ class FaqActivity : ComponentActivity() {
 
 @Composable
 fun FaqScreen() {
+    val ComicSans = FontFamily(Font(R.font.comicsans))
     val backgroundImage: Painter = painterResource(id = R.drawable.dinodashbg)
-
-    // Abrufen des aktuellen Kontexts innerhalb der Composable-Funktion
+    val homeIcon: Painter = painterResource(id = R.drawable.home)
     val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -60,11 +61,12 @@ fun FaqScreen() {
                 .fillMaxSize()
                 .padding(44.dp),
             horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        ){
             Text(
-                text = "FAQ's",
-                color = Color(0xFFFFFFFF),
-                fontSize = 78.sp,
+                text = "FAQs",
+                fontFamily = ComicSans,
+                color = Color(0xFF6F7D3F),
+                fontSize = 56.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(6.dp)
             )
@@ -76,40 +78,63 @@ fun FaqScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 items(faqList) { faq ->
-                    FaqItemCard(faq)
-                    Spacer(modifier = Modifier.height(10.dp))
-                }
-                item {
-                    Button(
-                        modifier = Modifier.padding(16.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF314A22)),
-                        onClick = {
-                            // Verwenden des Kontexts, um die Aktivität zu beenden
-                            if (context is ComponentActivity) {
-                                context.finish()
-                            }
-                        }
-                    ) {
-                        Text(text = "Zurück zum Hauptmenü")
+                        FaqItemCard(faq)
                     }
                 }
+
             }
+        IconButton(
+            onClick = { (context as? ComponentActivity)?.finish() },
+            modifier = Modifier
+                .size(128.dp) // Größe des Button
+                .padding(22.dp) // Abstand um Button von 16dp
+        ) {
+            Image(
+                painter = homeIcon,
+                contentDescription = "Zurück zum Hauptmenü",
+                modifier = Modifier.fillMaxSize()
+            )
+        }
         }
     }
-}
 
 @Composable
 fun FaqItemCard(faq: FaqItem) {
+    var expandedState by remember { mutableStateOf(false) }
+    val transitionState = remember { MutableTransitionState(expandedState) }
+    transitionState.targetState = expandedState
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Q: ${faq.question}", style = MaterialTheme.typography.headlineSmall)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "A: ${faq.answer}", style = MaterialTheme.typography.bodyLarge)
+        Column(
+            modifier = Modifier
+                .clickable { expandedState = !expandedState }
+                .padding(16.dp)
+        ) {
+            Text(
+                text = faq.question,
+                style = MaterialTheme.typography.headlineSmall,
+                color = Color(0xFF314A22),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium
+            )
+
+            AnimatedVisibility(
+                visibleState = transitionState,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                Text(
+                    text = faq.answer,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Light
+                )
+            }
         }
     }
 }
@@ -121,7 +146,7 @@ data class FaqItem(val question: String, val answer: String)
 val faqList = listOf(
     FaqItem(
         question = "Wie beginne ich das Spiel?",
-        answer = "Das Spiel startet, wenn du auf den „DinoDash starten“-Button im Hauptmenü tippst. Das Spiel ist für Touch-Geräte optimiert, also benutze einfach deinen Finger, um die Befehle zu geben"
+        answer = "Das Spiel startet, wenn du auf den „START“-Button im Hauptmenü tippst. Das Spiel ist für Touch-Geräte optimiert, also benutze einfach deinen Finger, um die Befehle zu geben"
     ),
     FaqItem(
         question = "Was ist das Ziel des Spiels?",
