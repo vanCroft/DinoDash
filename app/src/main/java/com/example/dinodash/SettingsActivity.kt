@@ -1,4 +1,5 @@
 package com.example.dinodash
+
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -16,9 +17,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.Composable
+import androidx.compose.foundation.Image
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.material3.*
+import androidx.compose.ui.graphics.painter.Painter
+
 
 class SettingsActivity : ComponentActivity() {
 
@@ -57,43 +66,64 @@ fun SettingsScreen(
     onSaveSetting: (String, Boolean) -> Unit
 ) {
     val context = LocalContext.current
+    val ComicSans = FontFamily(Font(R.font.comicsans))
+    val backgroundImage: Painter = painterResource(id = R.drawable.dinodashbg)
+    val homeIcon: Painter = painterResource(id = R.drawable.home)
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFA9B489)), // Hintergrundfarbe auf Grün setzen
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Einstellungen", // Überschrift "Einstellungen" hinzufügen
-            fontSize = 24.sp,
-            color = Color(0xFF6F7D3F), // Textfarbe auf Dunkelgrün setzen
-            modifier = Modifier.padding(16.dp)
+        // Hintergrundbild setzen
+        Image(
+            painter = backgroundImage,
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize()
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        ToggleButton(
-            label = "Musik",
-            isOn = isEpicPlaying,
-            onSaveSetting = onSaveSetting
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        ToggleButton(
-            label = "Sound",
-            isOn = isJurassicPlaying,
-            onSaveSetting = onSaveSetting
-        )
-
-        // Button zum Zurückkehren zum Hauptmenü
-        Button(
-            onClick = {
-                context.startActivity(Intent(context, MainActivity::class.java))
-            },
-            modifier = Modifier.padding(16.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Zurück zum Hauptmenü")
+            Text(
+                text = "Einstellungen",
+                fontFamily = ComicSans,
+                color = Color(0xFF6F7D3F),
+                fontSize = 56.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(6.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            ToggleButton(
+                label = "Musik",
+                isOn = isEpicPlaying,
+                onSaveSetting = onSaveSetting
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            ToggleButton(
+                label = "Sound",
+                isOn = isJurassicPlaying,
+                onSaveSetting = onSaveSetting
+            )
+
+            // Button zum Zurückkehren zum Hauptmenü
+            IconButton(
+                onClick = { (context as? ComponentActivity)?.finish() },
+                modifier = Modifier
+                    .size(128.dp) // Größe des Button
+                    .padding(22.dp) // Abstand um Button von 16dp
+            ) {
+                Image(
+                    painter = homeIcon,
+                    contentDescription = "Zurück zum Hauptmenü",
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
     }
 }

@@ -143,7 +143,7 @@ fun StartMenuScreen() {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 MenuButton(R.drawable.highscore, screenWidth) {
-                    // Logik für Highscore-Button
+                    context.startActivity(Intent(context, HighscoreActivity::class.java))
                 }
                 MenuButton(R.drawable.faq, screenWidth) {
                     context.startActivity(Intent(context, FaqActivity::class.java))

@@ -23,6 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".HighscoreActivity" />
         <activity android:name=".FaqActivity" />
         <activity android:name=".SettingsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden">
