@@ -1,5 +1,4 @@
 package com.example.dinodash
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,7 +21,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
-import android.media.MediaPlayer
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import android.content.res.Configuration
@@ -30,74 +28,34 @@ import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 
-
 class MainActivity : ComponentActivity() {
-
-    private lateinit var mediaPlayerJurassic: MediaPlayer
-    private lateinit var mediaPlayerEpic: MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             StartMenuScreen()
         }
-
-        // Initialisieren des MediaPlayers für Sound
-        mediaPlayerJurassic = MediaPlayer.create(this, R.raw.jurassic)
-        mediaPlayerJurassic.isLooping = true
-        mediaPlayerJurassic.start()
-
-        // Initialisieren des MediaPlayers für Music
-        mediaPlayerEpic = MediaPlayer.create(this, R.raw.epic)
-        mediaPlayerEpic.isLooping = true
-        mediaPlayerEpic.start()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (mediaPlayerJurassic.isPlaying) {
-            mediaPlayerJurassic.stop()
-        }
-        mediaPlayerJurassic.release()
-
-        if (mediaPlayerEpic.isPlaying) {
-            mediaPlayerEpic.stop()
-        }
-        mediaPlayerEpic.release()
     }
 }
 
 @Composable
-fun SettingsButton(mediaPlayerEpic: MediaPlayer, mediaPlayerJurassic: MediaPlayer) {
+fun SettingsButton() {
     val context = LocalContext.current
     val settingsLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == ComponentActivity.RESULT_OK) {
             val data: Intent? = result.data
-            data?.let {
-                val isEpicPlaying = it.getBooleanExtra("IS_EPIC_PLAYING", true)
-                val isJurassicPlaying = it.getBooleanExtra("IS_JURASSIC_PLAYING", true)
-
-                // Aktualisiere die MediaPlayer-Zustände basierend auf den Einstellungen
-                if (isEpicPlaying) mediaPlayerEpic.start() else mediaPlayerEpic.pause()
-                if (isJurassicPlaying) mediaPlayerJurassic.start() else mediaPlayerJurassic.pause()
-            }
+            // Implementiere hier die Logik, um die MediaPlayer-Zustände zu aktualisieren, falls notwendig
         }
     }
 
     Button(onClick = {
-        settingsLauncher.launch(Intent(context, SettingsActivity::class.java).apply {
-            // Übermittle die aktuellen Zustände der Mediaplayer als Extras, falls notwendig
-            putExtra("IS_EPIC_PLAYING", mediaPlayerEpic.isPlaying)
-            putExtra("IS_JURASSIC_PLAYING", mediaPlayerJurassic.isPlaying)
-        })
+        settingsLauncher.launch(Intent(context, SettingsActivity::class.java))
     }) {
         Text("Einstellungen")
     }
 }
-
-
 
 @Composable
 fun StartMenuScreen() {
@@ -107,7 +65,8 @@ fun StartMenuScreen() {
     val padding = if (isLandscape) 16.dp else 44.dp
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
-    val fontScale = if (isLandscape) 0.7 else 1.0 // Skalierung der Schriftgröße basierend auf der Orientierung
+    val fontScale =
+        if (isLandscape) 0.7 else 1.0 // Skalierung der Schriftgröße basierend auf der Orientierung
 
     Box(
         modifier = Modifier
@@ -156,7 +115,6 @@ fun StartMenuScreen() {
     }
 }
 
-
 @Composable
 fun StartButton(screenWidth: Dp) {
     val context = LocalContext.current
@@ -198,10 +156,8 @@ fun MenuButton(imageResource: Int, screenWidth: Dp, onClick: () -> Unit) {
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    StartMenuScreen ()
+    StartMenuScreen()
 }
-
