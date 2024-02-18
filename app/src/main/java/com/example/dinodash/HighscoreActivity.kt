@@ -1,5 +1,6 @@
 package com.example.dinodash
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,10 +20,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import android.content.Intent
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
+import android.content.Context
+
 
 class HighscoreActivity : ComponentActivity() {
 
@@ -36,17 +41,11 @@ class HighscoreActivity : ComponentActivity() {
 
 @Composable
 fun HighscoreScreen() {
+    val ComicSans = FontFamily(Font(R.font.comicsans))
     val backgroundImage: Painter = painterResource(id = R.drawable.dinodashbg)
     val context = LocalContext.current
 
-    // Beispiel-Highscores
-    val highscores = listOf(
-        Highscore("Spieler 1", 1200),
-        Highscore("Spieler 2", 900),
-        Highscore("Spieler 3", 800),
-        Highscore("Spieler 4", 750),
-        Highscore("Spieler 5", 700)
-    )
+    val highscores = readHighscoresFromAssets(context, "highscore.txt")
 
     Column(
         modifier = Modifier
@@ -63,9 +62,12 @@ fun HighscoreScreen() {
         )
 
         Text(
-            text = "Highscore", // Überschrift "Highscore" hinzufügen
-            fontSize = 24.sp,
-            modifier = Modifier.padding(16.dp)
+            text = "Highscore",
+            fontFamily = ComicSans,
+            color = Color(0xFF6F7D3F),
+            fontSize = 56.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(6.dp)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -80,7 +82,6 @@ fun HighscoreScreen() {
             }
         }
 
-        // Button zum Zurückkehren zum Hauptmenü
         Button(
             onClick = {
                 context.startActivity(Intent(context, MainActivity::class.java))
@@ -123,7 +124,34 @@ fun HighscoreItem(highscore: Highscore) {
     }
 }
 
-// Datenklasse für Highscore
 data class Highscore(val playerName: String, val score: Int) {
-    val isTopThree: Boolean = false // Setzen Sie dies auf true, wenn es sich um einen der Top 3 Highscores handelt
+    val isTopThree: Boolean = false
+}
+
+@Composable
+fun readHighscoresFromAssets(context: Context, fileName: String): List<Highscore> {
+    val highscores = mutableListOf<Highscore>()
+
+    try {
+        val inputStream = context.assets.open(fileName)
+        val reader = BufferedReader(InputStreamReader(inputStream))
+        var line: String?
+
+        // Read each line from the file and parse highscore data
+        while (reader.readLine().also { line = it } != null) {
+            val parts = line!!.split(" ") // Split by space
+            val playerName = parts[0]
+            val score = parts[1].toInt()
+
+            // Add parsed highscore to the list
+            highscores.add(Highscore(playerName, score))
+        }
+
+        // Close the reader
+        reader.close()
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+
+    return highscores
 }
