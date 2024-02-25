@@ -1,5 +1,6 @@
 package com.example.dinodash
 
+import androidx.compose.foundation.clickable
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -26,34 +27,29 @@ import androidx.compose.ui.text.font.FontWeight
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
-import android.content.Context
-
 
 class HighscoreActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            HighscoreScreen()
+            HighscoreScreen(this)
         }
+    }
+
+    fun navigateToMainActivity() {
+        startActivity(Intent(this, MainActivity::class.java))
     }
 }
 
 @Composable
-fun HighscoreScreen() {
-    val ComicSans = FontFamily(Font(R.font.comicsans))
+fun HighscoreScreen(activity: HighscoreActivity) {
     val backgroundImage: Painter = painterResource(id = R.drawable.dinodashbg)
-    val context = LocalContext.current
+    val homeIcon = painterResource(id = R.drawable.home)
+    val highscores = generateHighscores(activity)
+    val ComicSans = FontFamily(Font(R.font.comicsans))
 
-    val highscores = readHighscoresFromAssets(context, "highscore.txt")
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = backgroundImage,
             contentDescription = null,
@@ -61,34 +57,45 @@ fun HighscoreScreen() {
             contentScale = ContentScale.Crop
         )
 
-        Text(
-            text = "Highscore",
-            fontFamily = ComicSans,
-            color = Color(0xFF6F7D3F),
-            fontSize = 56.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(6.dp)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyColumn(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+                .fillMaxSize()
+                .padding(44.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(highscores) { highscore ->
-                HighscoreItem(highscore)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = homeIcon,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(76.dp)
+                        .clickable { activity.navigateToMainActivity() },
+                    contentScale = ContentScale.Fit
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Highscore",
+                    fontFamily = ComicSans,
+                    color = Color(0xFF6F7D3F),
+                    fontSize = 56.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(6.dp)
+                )
             }
-        }
 
-        Button(
-            onClick = {
-                context.startActivity(Intent(context, MainActivity::class.java))
-            },
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text("Zurück zum Hauptmenü")
+            Spacer(modifier = Modifier.height(24.dp))
+
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(highscores) { highscore ->
+                    HighscoreItem(highscore)
+                }
+            }
         }
     }
 }
@@ -107,14 +114,6 @@ fun HighscoreItem(highscore: Highscore) {
                 .background(if (highscore.isTopThree) Color.Green else Color.Transparent)
         ) {
             Text(
-                text = highscore.playerName,
-                style = MaterialTheme.typography.headlineSmall,
-                color = Color(0xFF314A22),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Medium
-            )
-
-            Text(
                 text = "Punktzahl: ${highscore.score}",
                 style = MaterialTheme.typography.bodyLarge,
                 fontSize = 16.sp,
@@ -124,34 +123,31 @@ fun HighscoreItem(highscore: Highscore) {
     }
 }
 
-data class Highscore(val playerName: String, val score: Int) {
+data class Highscore(val score: Int) {
     val isTopThree: Boolean = false
 }
 
-@Composable
-fun readHighscoresFromAssets(context: Context, fileName: String): List<Highscore> {
+fun generateHighscores(activity: HighscoreActivity): List<Highscore> {
     val highscores = mutableListOf<Highscore>()
+    val context = activity.applicationContext
 
     try {
-        val inputStream = context.assets.open(fileName)
+        val inputStream = context.assets.open("highscores.txt")
         val reader = BufferedReader(InputStreamReader(inputStream))
         var line: String?
 
-        // Read each line from the file and parse highscore data
+        // Datei auslesen und Zeile für Zeile parsen
         while (reader.readLine().also { line = it } != null) {
-            val parts = line!!.split(" ") // Split by space
-            val playerName = parts[0]
-            val score = parts[1].toInt()
-
-            // Add parsed highscore to the list
-            highscores.add(Highscore(playerName, score))
+            val score = line!!.toInt()
+            highscores.add(Highscore(score))
         }
 
-        // Close the reader
+        // Reader schließen
         reader.close()
     } catch (e: IOException) {
         e.printStackTrace()
     }
 
-    return highscores
+    // Sortiere Highscore in absteigender Reihenfolge
+    return highscores.sortedByDescending { it.score }
 }
