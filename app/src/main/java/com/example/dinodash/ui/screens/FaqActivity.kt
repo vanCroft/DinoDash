@@ -1,4 +1,4 @@
-package com.example.dinodash
+package com.example.dinodash.ui.screens
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -30,6 +30,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.runtime.Composable
+import com.example.dinodash.R
 
 
 class FaqActivity : ComponentActivity() {

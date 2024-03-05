@@ -1,4 +1,4 @@
-package com.example.dinodash
+package com.example.dinodash.ui.screens
 
 import androidx.compose.foundation.clickable
 import android.content.Intent
@@ -17,13 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import com.example.dinodash.R
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
