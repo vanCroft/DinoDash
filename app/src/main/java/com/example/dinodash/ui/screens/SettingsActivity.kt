@@ -1,4 +1,4 @@
-package com.example.dinodash
+package com.example.dinodash.ui.screens
 
 import android.content.Context
 import android.content.Intent
@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import android.media.MediaPlayer
+import com.example.dinodash.R
 
 class SettingsActivity : ComponentActivity() {
 
