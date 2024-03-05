@@ -46,8 +46,7 @@ fun SettingsButton() {
     ) { result ->
         if (result.resultCode == ComponentActivity.RESULT_OK) {
             val data: Intent? = result.data
-            // Implementiere hier die Logik, um die MediaPlayer-Zustände zu aktualisieren, falls notwendig
-        }
+           }
     }
 
     Button(onClick = {
