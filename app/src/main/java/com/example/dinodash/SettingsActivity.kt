@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -52,6 +51,7 @@ class SettingsActivity : ComponentActivity() {
         }
     }
 
+    // Freigabe Media Player Instanz bei Drehen oder Schließen
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayerEpic.release()
@@ -83,7 +83,7 @@ fun SettingsScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Setze das Hintergrundbild
+        // Hintergrundbild
         Image(
             painter = backgroundImage,
             contentDescription = null,
@@ -182,7 +182,7 @@ fun ToggleButton(
                     }
                 }
             },
-            colors = SwitchDefaults.colors( // Hier wird die Hintergrundfarbe des Schalters festgelegt
+            colors = SwitchDefaults.colors( // Farbe Schalter für An und Aus
                 checkedThumbColor = Color(0xFF6F7D3F),
                 uncheckedThumbColor = Color.Gray
             )

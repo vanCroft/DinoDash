@@ -140,7 +140,7 @@ fun FaqItemCard(faq: FaqItem) {
 }
 
 
-// FAQ
+// FAQ mit Fragen und Antworten
 data class FaqItem(val question: String, val answer: String)
 
 val faqList = listOf(

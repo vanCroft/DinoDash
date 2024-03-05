@@ -99,7 +99,7 @@ fun HighscoreScreen(activity: HighscoreActivity) {
         }
     }
 }
-
+//Anzeige der Highscoreeinträge
 @Composable
 fun HighscoreItem(highscore: Highscore) {
     Card(
@@ -127,6 +127,7 @@ data class Highscore(val score: Int) {
     val isTopThree: Boolean = false
 }
 
+//Highscore aus Datei highscores.txt lesen
 fun generateHighscores(activity: HighscoreActivity): List<Highscore> {
     val highscores = mutableListOf<Highscore>()
     val context = activity.applicationContext
