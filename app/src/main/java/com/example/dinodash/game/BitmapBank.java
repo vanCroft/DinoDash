@@ -55,9 +55,14 @@ public class BitmapBank {
         return 0;
     }
 
-    public Bitmap getPlayer(int frame) throws Exception{
+    public Bitmap[] getPlayer() {
+        return player;
+    }
+
+    public Bitmap getPlayer(int frame){
+        // TODO: make sure player is not null
         if(player == null){
-            throw new Exception("No Player provided");
+            //throw new Exception("No Player provided");
         }
         return player[frame];
     }
@@ -74,6 +79,10 @@ public class BitmapBank {
             return 0;
         }
         return player[0].getHeight();
+    }
+
+    public Bitmap[] getPlayerJump() {
+        return playerJump;
     }
 
     public Bitmap getPlayerJump(int frame){
