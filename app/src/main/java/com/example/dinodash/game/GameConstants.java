@@ -19,7 +19,7 @@ public class GameConstants {
         bitmapBank = new BitmapBank(context.getResources());
         GameConstants.gravity = 3;
         GameConstants.JUMP_VELOCITY = -40;
-        GameConstants.OBSTACLE_VELOCITY = 45;
+        GameConstants.OBSTACLE_VELOCITY = 5;
         GameConstants.playerGrounded = true;
         gameEngine = new GameEngine();
     }
