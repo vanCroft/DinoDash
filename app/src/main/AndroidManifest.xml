@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.DinoDash"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
         tools:targetApi="31">
         <activity
             android:name=".ui.screens.MainActivity"
@@ -27,6 +27,7 @@
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity android:name=".ui.screens.GameOver" />
         <activity android:name=".ui.screens.HighscoreActivity" />
         <activity android:name=".ui.screens.FaqActivity" />
         <activity android:name=".ui.screens.SettingsActivity"

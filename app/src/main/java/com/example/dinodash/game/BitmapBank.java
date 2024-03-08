@@ -11,30 +11,48 @@ import com.example.dinodash.utils.Helper;
 
 public class BitmapBank {
     Bitmap background;
-    Bitmap[] player = new Bitmap[4];
-    Bitmap[] playerJump = new Bitmap[2];
-    Bitmap[] playerDead = new Bitmap[2];
-    Bitmap smallEgg;
-    Bitmap mediumEgg;
-    Bitmap bigEgg;
+    Bitmap[] player = new Bitmap[12];
+    Bitmap[] playerJump = new Bitmap[12];
+    Bitmap playerDead;
+    Bitmap egg;
     Bitmap rottenEgg;
 
+
     public BitmapBank(Resources resources){
-        background = BitmapFactory.decodeResource(resources, R.drawable.dinodashbg);
+        background = BitmapFactory.decodeResource(resources, R.drawable.game_bg);
         background = scaleBackgrounImage(background);
         // player
-        player[0] = BitmapFactory.decodeResource(resources, R.drawable.dino);
-        player[1] = BitmapFactory.decodeResource(resources, R.drawable.dino);
-        player[2] = BitmapFactory.decodeResource(resources, R.drawable.dino);
-        player[3] = BitmapFactory.decodeResource(resources, R.drawable.dino);
-        playerJump[0] = BitmapFactory.decodeResource(resources, R.drawable.dino);
-        playerJump[1] = BitmapFactory.decodeResource(resources, R.drawable.dino);
-        playerDead[0] = BitmapFactory.decodeResource(resources, R.drawable.dino);
-        playerDead[1] = BitmapFactory.decodeResource(resources, R.drawable.dino);
-        smallEgg = BitmapFactory.decodeResource(resources, R.drawable.egg);
-        mediumEgg = BitmapFactory.decodeResource(resources, R.drawable.egg);
-        bigEgg = BitmapFactory.decodeResource(resources, R.drawable.egg);
-        rottenEgg = BitmapFactory.decodeResource(resources,R.drawable.egg);
+        player[0] = BitmapFactory.decodeResource(resources, R.drawable.dino1);
+        player[1] = BitmapFactory.decodeResource(resources, R.drawable.dino1);
+        player[2] = BitmapFactory.decodeResource(resources, R.drawable.dino1);
+        player[3] = BitmapFactory.decodeResource(resources, R.drawable.dino1);
+        player[4] = BitmapFactory.decodeResource(resources, R.drawable.dino1);
+        player[5] = BitmapFactory.decodeResource(resources, R.drawable.dino1);
+        player[6] = BitmapFactory.decodeResource(resources, R.drawable.dino2);
+        player[7] = BitmapFactory.decodeResource(resources, R.drawable.dino2);
+        player[8] = BitmapFactory.decodeResource(resources, R.drawable.dino2);
+        player[9] = BitmapFactory.decodeResource(resources, R.drawable.dino2);
+        player[10] = BitmapFactory.decodeResource(resources, R.drawable.dino2);
+        player[11] = BitmapFactory.decodeResource(resources, R.drawable.dino2);
+        // Jumping player
+        playerJump[0] = BitmapFactory.decodeResource(resources, R.drawable.dino_jump);
+        playerJump[1] = BitmapFactory.decodeResource(resources, R.drawable.dino_jump);
+        playerJump[2] = BitmapFactory.decodeResource(resources, R.drawable.dino_jump);
+        playerJump[3] = BitmapFactory.decodeResource(resources, R.drawable.dino_jump);
+        playerJump[4] = BitmapFactory.decodeResource(resources, R.drawable.dino_jump);
+        playerJump[5] = BitmapFactory.decodeResource(resources, R.drawable.dino_jump);
+        playerJump[6] = BitmapFactory.decodeResource(resources, R.drawable.dino_jump);
+        playerJump[7] = BitmapFactory.decodeResource(resources, R.drawable.dino_jump);
+        playerJump[8] = BitmapFactory.decodeResource(resources, R.drawable.dino_jump);
+        playerJump[9] = BitmapFactory.decodeResource(resources, R.drawable.dino_jump);
+        playerJump[10] = BitmapFactory.decodeResource(resources, R.drawable.dino_jump);
+        playerJump[11] = BitmapFactory.decodeResource(resources, R.drawable.dino_jump);
+        // Dead player
+        playerDead = BitmapFactory.decodeResource(resources, R.drawable.dino);
+        // Egg
+        egg = BitmapFactory.decodeResource(resources, R.drawable.egg);
+        // Rotten egg
+        rottenEgg = BitmapFactory.decodeResource(resources,R.drawable.rotten_egg);
     }
 
     public Bitmap getBackground(){
@@ -60,9 +78,8 @@ public class BitmapBank {
     }
 
     public Bitmap getPlayer(int frame){
-        // TODO: make sure player is not null
-        if(player == null){
-            //throw new Exception("No Player provided");
+        if (frame >= player.length){
+            frame = 0;
         }
         return player[frame];
     }
@@ -81,14 +98,14 @@ public class BitmapBank {
         return player[0].getHeight();
     }
 
-    public Bitmap[] getPlayerJump() {
+    public Bitmap[] getPlayerJump(){
         return playerJump;
     }
 
     public Bitmap getPlayerJump(int frame){
-        /*if(playerJump == null){
-            throw new Exception("No playerJump provided");
-        }*/
+        if(frame >= playerJump.length){
+            frame = 0;
+        }
         return playerJump[frame];
     }
 
@@ -106,60 +123,24 @@ public class BitmapBank {
         return playerJump[0].getHeight();
     }
 
-    public Bitmap getPlayerDead(int frame){
-        return playerDead[frame];
+    public Bitmap getPlayerDead(){
+        return playerDead;
     }
 
-    public Bitmap getSmallEgg(){
-        return smallEgg;
+    public Bitmap getEgg(){
+        return egg;
     }
 
-    public int getSmallEggWidth(){
-        if(smallEgg != null){
-            return smallEgg.getWidth();
+    public int getEggWidth(){
+        if(egg != null){
+            return egg.getWidth();
         }
         return 0;
     }
 
-    public int getSmallEggHeight(){
-        if(smallEgg != null){
-            return smallEgg.getHeight();
-        }
-        return 0;
-    }
-
-    public Bitmap getMediumEgg(){
-        return mediumEgg;
-    }
-
-    public int getMediumEggWidth(){
-        if(mediumEgg != null){
-            return mediumEgg.getWidth();
-        }
-        return 0;
-    }
-
-    public int getMediumEggHeight(){
-        if(mediumEgg != null){
-            return mediumEgg.getHeight();
-        }
-        return 0;
-    }
-
-    public Bitmap getBigEgg(){
-        return bigEgg;
-    }
-
-    public int getBigEggWidth(){
-        if(bigEgg != null){
-            return  bigEgg.getWidth();
-        }
-        return 0;
-    }
-
-    public int getBigEggHeight(){
-        if(bigEgg != null){
-            return  bigEgg.getHeight();
+    public int getEggHeight(){
+        if(egg != null){
+            return egg.getHeight();
         }
         return 0;
     }

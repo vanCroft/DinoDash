@@ -1,18 +1,18 @@
 package com.example.dinodash.game;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.example.dinodash.entity.BackgroundImage;
-import com.example.dinodash.entity.BigEgg;
-import com.example.dinodash.entity.MediumEgg;
 import com.example.dinodash.entity.Obstacles;
 import com.example.dinodash.entity.Player;
 import com.example.dinodash.entity.PlayerDead;
-import com.example.dinodash.entity.RottenEgg;
-import com.example.dinodash.entity.SmallEgg;
+import com.example.dinodash.ui.screens.GameOver;
 import com.example.dinodash.utils.Helper;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class GameEngine {
     ArrayList<Obstacles> obstaclesList;
     Obstacles obstacle;
     boolean obstacleSpawed;
-    int playerFrame, playerJumpFrame, playerDeadFrame;
+    int playerFrame, playerJumpFrame;
     int points;
     int gameState;
     final int TEXT_SIZE = 80;
@@ -45,7 +45,6 @@ public class GameEngine {
         score = 0;
 
         playerFrame = 0;
-        playerDeadFrame = 0;
         playerJumpFrame = 0;
 
         scorePaint = new Paint();
@@ -53,11 +52,9 @@ public class GameEngine {
         scorePaint.setTextSize(TEXT_SIZE);
         scorePaint.setTextAlign(Paint.Align.LEFT);
         obstaclesList = new ArrayList<Obstacles>();
-        obstaclesList.add(new Obstacles("smallEgg"));
-        obstaclesList.add(new Obstacles("mediumEgg"));
-        obstaclesList.add(new Obstacles("bigEgg"));
+        obstaclesList.add(new Obstacles("egg"));
+        obstaclesList.add(new Obstacles("egg"));
         obstaclesList.add(new Obstacles("rottenEgg"));
-
         points = 0;
     }
 
@@ -69,9 +66,10 @@ public class GameEngine {
                 backgroundImage.setBackgroundImageX(0);
             }
         }
-        canvas.drawBitmap(GameConstants.bitmapBank.getBackground(), backgroundImage.getBackgroundImageX(), backgroundImage.getGetBackgroundImageY(),null);
+        canvas.drawBitmap(GameConstants.bitmapBank.getBackground(), backgroundImage.getBackgroundImageX(), backgroundImage.getBackgroundImageY(),null);
+
         if(backgroundImage.getBackgroundImageX() < -(GameConstants.bitmapBank.getBackgroundWidth() - Helper.SCREEN_WIDTH)){
-            canvas.drawBitmap(GameConstants.bitmapBank.getBackground(), backgroundImage.getBackgroundImageX() + GameConstants.bitmapBank.getBackgroundWidth(),backgroundImage.getGetBackgroundImageY(),null);
+            canvas.drawBitmap(GameConstants.bitmapBank.getBackground(), backgroundImage.getBackgroundImageX() + GameConstants.bitmapBank.getBackgroundWidth(),backgroundImage.getBackgroundImageY(),null);
         }
     }
 
@@ -79,80 +77,29 @@ public class GameEngine {
         if(gameState == 1){
             if(GameConstants.playerGrounded == true){
                 //System.out.println("draw player grounded");
-                player.setVelocity(player.getVelocity() + GameConstants.gravity);
+                player.setVelocity(-GameConstants.JUMP_VELOCITY);
                 canvas.drawBitmap(GameConstants.getBitmapBank().getPlayer(playerFrame), player.getpX(), player.getpY(), null);
                 playerFrame++;
-                if(playerFrame >= GameConstants.getBitmapBank().getPlayer().length -1){
+                if(playerFrame > GameConstants.getBitmapBank().getPlayer().length -1){
                     playerFrame = 0;
                 }
                 // check collision
             }
             else{
-                //System.out.println("draw player jumping");
-                //player.setVelocity(player.getVelocity() + GameConstants.gravity);
-                player.setpY(player.getpY() - 200);
+                player.setVelocity(player.getVelocity() + GameConstants.gravity);
+                player.setpY(player.getpY() - 100);
                 canvas.drawBitmap(GameConstants.getBitmapBank().getPlayerJump(playerJumpFrame),player.getpX(),player.getpY(),null);
                 playerJumpFrame++;
-                if(playerJumpFrame >  GameConstants.getBitmapBank().getPlayerJump().length -1){
+                if(playerJumpFrame > GameConstants.getBitmapBank().getPlayerJump().length -1){
                     playerJumpFrame = 0;
                     player.setpY(player.pYInitial);
                     GameConstants.playerGrounded = true;
                 }
             }
-            canvas.drawText("Punkte: "+points, 0, TEXT_SIZE, scorePaint);
+            canvas.drawText("Punkte: "+(points < 0 ? 0: points), 0, TEXT_SIZE, scorePaint);
         }
 
     }
-
-    /* public void updateAndDrawPlayers(Canvas canvas)  {
-        if(gameState == 1){
-            if(collision == false && GameConstants.playerGrounded == false){
-                player.setVelocity(player.getVelocity() + GameConstants.gravity);
-                player.setpY(player.getpY() + player.getVelocity());
-                canvas.drawBitmap(GameConstants.getBitmapBank().getPlayerJump(playerJumpFrame),player.getpX(),player.getpY(),null);
-                playerJumpFrame++;
-                if(playerJumpFrame > 3){
-                    playerJumpFrame = 0;
-                }
-                if(player.getpY() >= player.pYInitial){
-                    player.setpY(player.pYInitial);
-                    GameConstants.playerGrounded = true;
-                }
-            }
-            else if (collision == true && GameConstants.playerGrounded == false){
-                playerDead.setVelocity(playerDead.getVelocity() + GameConstants.gravity);
-                playerDead.setpY(playerDead.getpY() + playerDead.getVelocity());
-                canvas.drawBitmap(GameConstants.getBitmapBank().getPlayerDead(playerDeadFrame),playerDead.getpX(), playerDead.getpY(),null);
-                playerDeadFrame++;
-                if(playerDeadFrame == 1){
-                    gameState = 2; // Game over state
-                    // TODO: save current score and display game over activiy
-                }
-                if(playerDead.getpY() >= playerDead.pYInitial){
-                    playerDead.setpY(playerDead.pYInitial);
-                    GameConstants.playerGrounded = true;
-                }
-            }
-            else if(collision == true && GameConstants.playerGrounded){
-                System.out.println("Draw dead player");
-                canvas.drawBitmap(GameConstants.getBitmapBank().getPlayerDead(playerDeadFrame),playerDead.getpX(), playerDead.getpY(), null);
-                if(playerDead.getpY() >= playerDead.pYInitial){
-                    playerDead.setpY(playerDead.pYInitial);
-                    GameConstants.playerGrounded = true;
-                }
-            }
-            if(obstacle != null){
-                if(obstacle.cX <= player.pX
-                        && obstacle.cX + obstacle.width >= player.pX
-                        && obstacle.cY > player.pY
-                        && obstacle.cY <= player.pY + GameConstants.getBitmapBank().getPlayerHeight()){
-                    collision = true;
-                    obstacle.reset();
-                }
-                canvas.drawText("Punkte: "+points, 0, TEXT_SIZE, scorePaint);
-            }
-        }
-    }*/
 
     public void updateAndDrawObstacles(Canvas canvas){
         if(gameState == 1){
@@ -161,28 +108,26 @@ public class GameEngine {
                 obstacle = obstaclesList.get(randIndex);
                 obstacleSpawed = true;
             }
-            if(collision == false){
-                obstacle.cX -= obstacle.velocity;
-                if(obstacle.type.equalsIgnoreCase("smallEgg")){
-                    //System.out.println("get small egg bitmap");
-                    obs = GameConstants.getBitmapBank().getSmallEgg();
-                }
-                else if(obstacle.type.equalsIgnoreCase("mediumEgg")){
-                    //System.out.println("get medium egg bitmap");
-                    obs = GameConstants.getBitmapBank().getMediumEgg();
-                }
-                else if(obstacle.type.equalsIgnoreCase("bigEgg")){
-                    //System.out.println("get big egg bitmap");
-                    obs = GameConstants.getBitmapBank().getBigEgg();
-                }
-                else if(obstacle.type.equalsIgnoreCase("rottenEgg")){
-                    //System.out.println("get rotten egg bitmap");
-                    obs = GameConstants.getBitmapBank().getRottenEgg();
-                }
-                //System.out.println("draw obstacle  "+obstacle.type+" at x="+obstacle.cX+" abd y="+obstacle.cY);
+            obstacle.cX -= obstacle.velocity;
+            if(obstacle.type.equalsIgnoreCase("egg")){
+                obs = GameConstants.getBitmapBank().getEgg();
+            }
+            else if(obstacle.type.equalsIgnoreCase("rottenEgg")){
+                obs = GameConstants.getBitmapBank().getRottenEgg();
+            }
+            if(obs != null){
                 canvas.drawBitmap(obs, obstacle.cX,obstacle.cY,null);
-                // Handle collison
-                if((obstacle.cX - player.pX - GameConstants.getBitmapBank().getPlayerWidth()) <= 20){
+                // Handle collision
+                int spaceBetweenPlayerAndObstacle = obstacle.cX - player.pX - GameConstants.getBitmapBank().getPlayerWidth();
+                /*if(GameConstants.playerGrounded && spaceBetweenPlayerAndObstacle <= 20 && spaceBetweenPlayerAndObstacle > -20){
+                    // reset obstacle and add points
+                    points += getPoint(obstacle.type);
+                    if(points <=0){
+                        points = 0;
+                        gameState = 2;
+                    }
+                }*/
+                if(spaceBetweenPlayerAndObstacle <= 20){
                     if(GameConstants.playerGrounded){
                         obstacle.reset();
                         points += getPoint(obstacle.type);
@@ -190,6 +135,11 @@ public class GameEngine {
                             System.out.println("Game over");
                             // TODO: save score and display game over screen
                             gameState = 2;
+                            Context context = GameConstants.gameActivityContext;
+                            Intent intent = new Intent(context, GameOver.class);
+                            intent.putExtra("points", points);
+                            context.startActivity(intent);
+                            ((Activity) context).finish();
                         }
                         else{
                             obstacleSpawed = false;
@@ -198,31 +148,26 @@ public class GameEngine {
                     }
                 }
 
-                /*if(obstacle.cX <= -GameConstants.getBitmapBank().getSmallEggWidth()){
-                    obstacle.reset();
-                    points += 10;
-                    obstacleSpawed = false;
-                }*/
             }
         }
     }
 
+    public void setGameState(int state){
+        gameState = state;
+    }
+
     private int getPoint(String obstacleType){
-        System.out.println("Get points for "+obstacleType);
-        if(obstacleType == null){
-            return 0;
+        if(obstacleType != null && GameConstants.playerGrounded){
+            switch (obstacleType.toLowerCase()){
+                case "rottenegg":
+                    return -10;
+                case "egg":
+                    return 15;
+                default:
+                    return 0;
+            }
         }
-        switch (obstacleType.toLowerCase()){
-            case "rottenegg":
-                return -10;
-            case "bigegg":
-                return 5;
-            case "mediumegg":
-                return 10;
-            case "smallegg":
-                return 15;
-            default:
-                return 0;
-        }
+        return 0;
+
     }
 }

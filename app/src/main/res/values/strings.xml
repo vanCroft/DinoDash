@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">DinoDash</string>
+    <string name="restart">Neustarten</string>
+    <string name="exit">Beenden</string>
+    <string name="points">Punkte: </string>
+    <string name="personal_best">Bestes Ergebenis: </string>
 </resources>

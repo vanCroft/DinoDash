@@ -19,7 +19,7 @@ public class BackgroundImage {
         this.backgroundImageX = backgroundImageX;
     }
 
-    public int getGetBackgroundImageY() {
+    public int getBackgroundImageY() {
         return backgroundImageY;
     }
 

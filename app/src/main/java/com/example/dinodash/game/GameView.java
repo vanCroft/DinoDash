@@ -1,17 +1,25 @@
 package com.example.dinodash.game;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 
+import com.example.dinodash.R;
+
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     GameThread gameThread;
+    MediaPlayer musicPlayer;
+    MediaPlayer jumpPlayer;
 
     public GameView(Context context){
         super(context);
+        musicPlayer = MediaPlayer.create(context, R.raw.epic);
+        jumpPlayer = MediaPlayer.create(context, R.raw.jump);
+        musicPlayer.setLooping(true);
         initView();
     }
 
@@ -20,6 +28,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         holder.addCallback(this);
         setFocusable(true);
         gameThread = new GameThread(holder);
+        musicPlayer.start();
     }
 
     @Override
@@ -33,6 +42,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if(GameConstants.playerGrounded == true){
                 GameConstants.getGameEngine().player.setVelocity(GameConstants.JUMP_VELOCITY);
                 GameConstants.playerGrounded = false;
+                jumpPlayer.start();
             }
         }
         return true;
@@ -71,5 +81,20 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 }
             }
         }
+    }
+
+    public void pause(){
+        musicPlayer.pause();
+        GameConstants.getGameEngine().setGameState(0);
+    }
+
+    public void resume(){
+        GameConstants.getGameEngine().setGameState(1);
+        musicPlayer.start();
+    }
+
+    public void stop(){
+        musicPlayer.stop();
+        jumpPlayer.stop();
     }
 }

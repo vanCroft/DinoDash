@@ -25,6 +25,22 @@ public class GameActivity extends AppCompatActivity {
         setContentView(layout);
     }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+        if(gameView != null){
+            gameView.pause();
+        }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(gameView != null){
+            gameView.resume();
+        }
+    }
+
      @Override
      public void onDestroy(){
         super.onDestroy();

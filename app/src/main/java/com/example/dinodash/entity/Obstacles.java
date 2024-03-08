@@ -22,20 +22,10 @@ public class Obstacles {
         points = 0;
         random = new Random();
 
-        if(type.equalsIgnoreCase("smallEgg")){
-            cY -= GameConstants.getBitmapBank().getSmallEggHeight();
+        if(type.equalsIgnoreCase("egg")){
+            cY -= GameConstants.getBitmapBank().getEggHeight();
             velocity = GameConstants.OBSTACLE_VELOCITY + 14 + random.nextInt(5);
-            width = GameConstants.getBitmapBank().getSmallEggWidth();
-        }
-        else if(type.equalsIgnoreCase("mediumEgg")){
-            cY -= GameConstants.getBitmapBank().getMediumEggHeight();
-            velocity = GameConstants.OBSTACLE_VELOCITY + 12 + random.nextInt(5);
-            width = GameConstants.getBitmapBank().getMediumEggWidth();
-        }
-        else if(type.equalsIgnoreCase("bigEgg")){
-            cY -= GameConstants.getBitmapBank().getBigEggHeight();
-            velocity = GameConstants.OBSTACLE_VELOCITY + 11 + random.nextInt(5);
-            width = GameConstants.getBitmapBank().getMediumEggWidth();
+            width = GameConstants.getBitmapBank().getEggWidth();
         }
         else if(type.equalsIgnoreCase("rottenEgg")){
             cY -= GameConstants.getBitmapBank().getRottenHeight();
@@ -46,14 +36,8 @@ public class Obstacles {
 
     public void reset(){
         cX = Helper.SCREEN_WIDTH + 300;
-        if(type.equalsIgnoreCase("smallEgg")){
+        if(type.equalsIgnoreCase("egg")){
             this.velocity = GameConstants.OBSTACLE_VELOCITY + 14 + random.nextInt(5);
-        }
-        else if(type.equalsIgnoreCase("mediumEgg")){
-            this.velocity = GameConstants.OBSTACLE_VELOCITY + 12 + random.nextInt(5);
-        }
-        else if(type.equalsIgnoreCase("bigEgg")){
-            this.velocity = GameConstants.OBSTACLE_VELOCITY + 11 + random.nextInt(5);
         }
         else if(type.equalsIgnoreCase("rottenEgg")){
             this.velocity = GameConstants.OBSTACLE_VELOCITY + 15 + random.nextInt(5);
