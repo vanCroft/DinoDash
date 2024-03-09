@@ -22,6 +22,7 @@ public class GameThread extends Thread {
             if(canvas != null){
                 synchronized (surfaceHolder){
                     GameConstants.getGameEngine().updateAndDrawBackroundImage(canvas);
+                    GameConstants.getGameEngine().updateAndDrawRemainingTime(canvas);
                     GameConstants.getGameEngine().updateAndDrawPlayer(canvas);
                     GameConstants.getGameEngine().updateAndDrawObstacles(canvas);
                     surfaceHolder.unlockCanvasAndPost(canvas);

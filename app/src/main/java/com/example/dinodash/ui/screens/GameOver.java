@@ -1,7 +1,6 @@
 package com.example.dinodash.ui.screens;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -19,14 +18,8 @@ public class GameOver extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_over);
         int points = getIntent().getIntExtra("points",0);
-        SharedPreferences pref = getSharedPreferences("DinoDash",0);
-        int bestScore = pref.getInt("bestScore",0);
-        if(points > bestScore){
-            SharedPreferences.Editor editor = pref.edit();
-            bestScore = points;
-            editor.putInt("bestScore",bestScore);
-            editor.commit();
-        }
+        int bestScore = getIntent().getIntExtra("bestScore",0);
+
         scoreView = findViewById(R.id.gamePoints);
         bestScoreView = findViewById(R.id.gamePersonalBest);
 
@@ -35,12 +28,14 @@ public class GameOver extends AppCompatActivity {
     }
 
     public void restart(View view){
-        Intent intent = new Intent(GameOver.this, MainActivity.class);
+        Intent intent = new Intent(GameOver.this, GameActivity.class);
         startActivity(intent);
         finish();
     }
 
     public void exit(View view){
+        Intent intent =  new Intent(GameOver.this, MainActivity.class);
+        startActivity(intent);
         finish();
     }
 }

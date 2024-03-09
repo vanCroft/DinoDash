@@ -1,6 +1,7 @@
 package com.example.dinodash.game;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -14,12 +15,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     GameThread gameThread;
     MediaPlayer musicPlayer;
     MediaPlayer jumpPlayer;
+    boolean playMusic;
+    boolean playSound;
 
     public GameView(Context context){
         super(context);
-        musicPlayer = MediaPlayer.create(context, R.raw.epic);
-        jumpPlayer = MediaPlayer.create(context, R.raw.jump);
-        musicPlayer.setLooping(true);
+        SharedPreferences pref = context.getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+        playMusic = pref.getBoolean("EpicMusic", true);
+        playSound = pref.getBoolean("JurassicSound", true);
+        if(playMusic){
+            musicPlayer = MediaPlayer.create(context, R.raw.epic);
+            musicPlayer.setLooping(true);
+        }
+        if(playSound){
+            jumpPlayer = MediaPlayer.create(context, R.raw.jump);
+        }
         initView();
     }
 
@@ -28,21 +38,25 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         holder.addCallback(this);
         setFocusable(true);
         gameThread = new GameThread(holder);
-        musicPlayer.start();
+        if(musicPlayer != null){
+            musicPlayer.start();
+        }
+
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
         int action = event.getAction();
-        System.out.println("Motion event action: "+action);
         if (action == MotionEvent.ACTION_DOWN){
             if(GameConstants.getGameEngine().gameState == 0){
                 GameConstants.getGameEngine().gameState = 1;
             }
             if(GameConstants.playerGrounded == true){
                 GameConstants.getGameEngine().player.setVelocity(GameConstants.JUMP_VELOCITY);
+                if(jumpPlayer != null){
+                    jumpPlayer.start();
+                }
                 GameConstants.playerGrounded = false;
-                jumpPlayer.start();
             }
         }
         return true;
@@ -84,17 +98,29 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void pause(){
-        musicPlayer.pause();
+        if(musicPlayer != null){
+            musicPlayer.pause();
+        }
         GameConstants.getGameEngine().setGameState(0);
     }
 
     public void resume(){
         GameConstants.getGameEngine().setGameState(1);
-        musicPlayer.start();
+        if(musicPlayer != null){
+            musicPlayer.start();
+        }
     }
 
     public void stop(){
-        musicPlayer.stop();
-        jumpPlayer.stop();
+        if (musicPlayer != null){
+            musicPlayer.stop();
+            musicPlayer.reset();
+            musicPlayer.release();
+        }
+        if(jumpPlayer != null){
+            jumpPlayer.stop();
+            jumpPlayer.reset();
+            jumpPlayer.release();
+        }
     }
 }

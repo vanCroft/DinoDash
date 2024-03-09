@@ -8,8 +8,8 @@ public class Player {
 
     public Player(){
         pX = Helper.SCREEN_WIDTH / 3 - GameConstants.getBitmapBank().getPlayerWidth();
-        pYInitial = Helper.SCREEN_HEIGHT - GameConstants.getBitmapBank().getPlayerHeight();
-        pY = Helper.SCREEN_HEIGHT - GameConstants.getBitmapBank().getPlayerHeight();
+        pYInitial = Helper.SCREEN_HEIGHT - GameConstants.getBitmapBank().getPlayerHeight() - 50;
+        pY = Helper.SCREEN_HEIGHT - GameConstants.getBitmapBank().getPlayerHeight() -50;
         currentFrame = 0;
         velocity = 0;
     }

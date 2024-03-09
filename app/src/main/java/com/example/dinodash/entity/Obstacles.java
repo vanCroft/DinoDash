@@ -16,7 +16,7 @@ public class Obstacles {
     public Obstacles(String type){
         this.type = type;
         cX = Helper.SCREEN_WIDTH +1000;
-        cY = Helper.SCREEN_HEIGHT;
+        cY = Helper.SCREEN_HEIGHT - 50; // 50 represent the ground height
         velocity = 0;
         width = 0;
         points = 0;
@@ -24,23 +24,31 @@ public class Obstacles {
 
         if(type.equalsIgnoreCase("egg")){
             cY -= GameConstants.getBitmapBank().getEggHeight();
-            velocity = GameConstants.OBSTACLE_VELOCITY + 14 + random.nextInt(5);
+            velocity = GameConstants.OBSTACLE_VELOCITY + 10 + random.nextInt(3);
             width = GameConstants.getBitmapBank().getEggWidth();
         }
         else if(type.equalsIgnoreCase("rottenEgg")){
             cY -= GameConstants.getBitmapBank().getRottenHeight();
-            velocity = GameConstants.OBSTACLE_VELOCITY + 15 + random.nextInt(5);
+            velocity = GameConstants.OBSTACLE_VELOCITY + 15 + random.nextInt(3);
             width = GameConstants.getBitmapBank().getRottenEggWidth();
+        }
+        else if(type.equalsIgnoreCase("tree")){
+            cY -= GameConstants.getBitmapBank().getTreeHeight();
+            velocity = GameConstants.OBSTACLE_VELOCITY + 13 + random.nextInt(3);
+            width = GameConstants.getBitmapBank().getTreeWidth();
         }
     }
 
     public void reset(){
         cX = Helper.SCREEN_WIDTH + 300;
         if(type.equalsIgnoreCase("egg")){
-            this.velocity = GameConstants.OBSTACLE_VELOCITY + 14 + random.nextInt(5);
+            this.velocity = GameConstants.OBSTACLE_VELOCITY + 10 + random.nextInt(3);
         }
         else if(type.equalsIgnoreCase("rottenEgg")){
-            this.velocity = GameConstants.OBSTACLE_VELOCITY + 15 + random.nextInt(5);
+            this.velocity = GameConstants.OBSTACLE_VELOCITY + 15 + random.nextInt(3);
+        }
+        else if(type.equalsIgnoreCase("tree")){
+            this.velocity = GameConstants.OBSTACLE_VELOCITY + 13 + random.nextInt(3);
         }
     }
 }

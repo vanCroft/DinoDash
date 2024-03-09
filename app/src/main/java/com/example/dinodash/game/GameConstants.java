@@ -10,6 +10,7 @@ public class GameConstants {
     public static int gravity;
     public static int JUMP_VELOCITY;
     public static int OBSTACLE_VELOCITY;
+    public static long PLAY_TIME = 60; // Max playing time in seconds
     public static Context gameActivityContext;
     static boolean playerGrounded;
 
@@ -17,7 +18,6 @@ public class GameConstants {
         Helper.setScreenSize(context);
         GameConstants.gameActivityContext = context;
         bitmapBank = new BitmapBank(context.getResources());
-        GameConstants.gravity = 3;
         GameConstants.JUMP_VELOCITY = -40;
         GameConstants.OBSTACLE_VELOCITY = 15;
         GameConstants.playerGrounded = true;
